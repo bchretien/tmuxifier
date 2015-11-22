@@ -154,7 +154,7 @@ window_root() {
 #
 # Arguments:
 #   - $1: Name of or file path to window layout to load.
-#   - $2: (optional) Override default window name.
+#   - $2...: (optional) Arguments forwarded to the window layout script.
 #
 load_window() {
   local file="$1"
@@ -163,12 +163,10 @@ load_window() {
   fi
 
   if [ -f "$file" ]; then
-    if [ $# -gt 1 ]; then
-      window="$2"
-    else
-      window="${1/%.window.sh}"
-      window="${window/%.sh}"
-    fi
+    window="${1/%.window.sh}"
+    window="${window/%.sh}"
+    shift
+    window_args=("${@}")
     source "$file"
     window=
 
